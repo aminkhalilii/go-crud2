@@ -12,10 +12,12 @@ import (
 func main() {
 
 	config.InitMysql()
-
-	defer config.DB.Close()
+	config.InitRedis()
 
 	router := gin.Default()
 	routes.RegisterRoutes(router)
 	router.Run(":8080")
+
+	defer config.DB.Close()
+
 }

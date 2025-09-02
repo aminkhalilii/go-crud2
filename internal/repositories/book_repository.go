@@ -20,4 +20,12 @@ func GetAllBooks() ([]models.Book, error) {
 		books = append(books, b)
 	}
 	return books, nil
+
+}
+func SaveBook(book models.Book) (models.Book, error) {
+	res, err := config.DB.Exec("insert into books (title,author) values (?,?)", book.Title, book.Author)
+
+	id, _ := res.LastInsertId()
+	book.ID = int(id)
+	return book, err
 }
