@@ -4,6 +4,7 @@ import (
 	"crud/internal/models"
 	"crud/internal/services"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,4 +34,19 @@ func SaveBook(c *gin.Context) {
 
 	c.JSON(200, gin.H{"message": "Book saved successfully"})
 
+}
+func GetBook(c *gin.Context) {
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		return
+	}
+	book, err := services.GetBook(id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "book not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, book)
 }

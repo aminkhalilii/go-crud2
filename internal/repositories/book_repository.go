@@ -29,3 +29,12 @@ func SaveBook(book models.Book) (models.Book, error) {
 	book.ID = int(id)
 	return book, err
 }
+func FindBook(id int) (*models.Book, error) {
+	row := config.DB.QueryRow("SELECT * FROM books where id = ? ", id)
+
+	var b models.Book
+	if err := row.Scan(&b.ID, &b.Title, &b.Author); err != nil {
+		return nil, err
+	}
+	return &b, nil
+}
